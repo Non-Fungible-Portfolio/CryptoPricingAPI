@@ -1,4 +1,4 @@
-import { MaybePromise, initTRPC } from '@trpc/server';
+import { MaybePromise, inferProcedureOutput, initTRPC } from '@trpc/server';
 import { ResolveOptions } from 'dns';
 import { z } from 'zod';
 
@@ -18,12 +18,7 @@ All routes defined below
 // Pricing routes definitions
 function pricingRoutes(){
     // /getPrice?asset=ethereum&timestamp=unix
-    const getPrice = t.procedure.input(
-        z.object({
-            asset: z.enum(["ethereum"]),
-            timestamp: z.number().int()
-        })
-    ).query(test);
+    const getPrice = t.procedure.query(test);
 
     // Return router object
     return t.router({
@@ -31,6 +26,6 @@ function pricingRoutes(){
     })
 }
 
-function test(input: ResolveOptions): MaybePromise<any> {
-
+function test(input: any): MaybePromise<any> {
+    console.log(input);
 }
