@@ -1,4 +1,5 @@
-import { initTRPC } from '@trpc/server';
+import { MaybePromise, initTRPC } from '@trpc/server';
+import { ResolveOptions } from 'dns';
 import { z } from 'zod';
 
 // Initiate tRPC instance
@@ -22,12 +23,14 @@ function pricingRoutes(){
             asset: z.enum(["ethereum"]),
             timestamp: z.number().int()
         })
-    ).query((opts) => {
-        return 0;
-    });
+    ).query(test);
 
     // Return router object
     return t.router({
         getPrice
     })
+}
+
+function test(input: ResolveOptions): MaybePromise<any> {
+
 }
