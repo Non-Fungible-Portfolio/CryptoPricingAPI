@@ -4,5 +4,9 @@ export interface RequestPayload {
     req: FastifyRequest,
     res: FastifyReply,
     body?: unknown,
-    query?: 
+    query?: Record<any, any>
+}
+
+export interface GetPriceRequest extends RequestPayload {
+    
 }
