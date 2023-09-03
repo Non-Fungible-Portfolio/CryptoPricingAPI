@@ -1,9 +1,9 @@
-import { GetPriceRequest } from "../definitions/RequestTypes";
+import { GetPricePayload, GetPriceRequest } from "../definitions/RequestTypes";
 import { GetPriceResponse } from "../definitions/ResponseTypes";
 import { PricingService } from "../services/PricingService";
 
 export class PricingController {
-    static async getPrice(context: GetPriceRequest): Promise<GetPriceResponse>{
+    static async getPrice(context: GetPricePayload): Promise<GetPriceResponse>{
         // Get price for asset from the pricing service
         const price = await PricingService.getPrice(context.input.asset, context.input.timestamp);
 

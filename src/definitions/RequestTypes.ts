@@ -9,9 +9,17 @@ export interface RequestPayload {
     input: unknown
 }
 
-export interface GetPriceRequest extends RequestPayload {
-    input: {
-        asset: "ethereum",
-        timestamp: number
-    }
+// Route definitions for api/getPrice
+export interface GetPriceRequest {
+    asset: "ethereum",
+    timestamp: number
+}
+
+export const GetPriceRequestZod = z.object({
+    asset: z.enum(["ethereum"]),
+    timestamp: z.number()
+}) satisfies z.ZodType<GetPriceRequest>;
+
+export interface GetPricePayload extends RequestPayload {
+    input: GetPriceRequest
 }
