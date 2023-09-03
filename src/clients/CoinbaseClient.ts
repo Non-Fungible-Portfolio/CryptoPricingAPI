@@ -1,6 +1,7 @@
 import axios from "axios";
 import { log } from "../utils/Log";
 import { PriceAssets } from "../definitions/PriceTypes";
+import { unixToISO } from "../utils/TimeUtils";
 
 export type CoinbasePricingResponse = Array<Array<number>>;
 
