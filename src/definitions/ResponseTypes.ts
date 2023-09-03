@@ -42,7 +42,7 @@ Per-path responses below
 export interface GetPriceResponse extends SuccessResponse {
     data: {
         timestamp: number,
-        value: number,
+        price: number,
         volume: number
     }
 }
@@ -50,7 +50,7 @@ export interface GetPriceResponse extends SuccessResponse {
 export const GetPriceResponseZod = SuccessResponseZod.extend({
     data: z.object({
         timestamp: z.number(),
-        value: z.number(),
+        price: z.number(),
         volume: z.number()
     })
 }) satisfies z.ZodType<GetPriceResponse>;

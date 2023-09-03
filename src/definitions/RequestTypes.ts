@@ -1,12 +1,17 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import { z } from "zod";
 
 export interface RequestPayload {
-    req: FastifyRequest,
-    res: FastifyReply,
-    body?: unknown,
-    query?: Record<any, any>
+    ctx: {
+        req: FastifyRequest,
+        res: FastifyReply,
+    },
+    input: unknown
 }
 
 export interface GetPriceRequest extends RequestPayload {
-    
+    input: {
+        asset: "ethereum",
+        timestamp: number
+    }
 }

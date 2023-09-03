@@ -1,8 +1,7 @@
 export type PriceAssets = "ethereum";
 
-export interface PriceResponse {
-    asset: PriceAssets,
+export interface PriceResult {
     price: number,
-    timestamp: number,
-    volume: number
+    volume: number,
+    timestamp: number
 }
