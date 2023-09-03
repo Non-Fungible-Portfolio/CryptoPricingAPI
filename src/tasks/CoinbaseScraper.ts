@@ -2,13 +2,14 @@ import { Logger } from "Logger";
 import { CoinbaseClient } from "../clients/CoinbaseClient";
 import { PriceAssets } from "../definitions/PriceTypes";
 import { PriceModel } from "../models/PriceModel";
+import { log } from "../utils/Log";
 
 export class CoinbaseScraper {
-    private sync: Record<PriceAssets, number>;
+    private sync: Record<PriceAssets, NodeJS.Timeout>;
 
     constructor(){
         this.sync = {
-            ethereum: -1
+            ethereum: setTimeout(() => null, 1)
         };
     }
 
@@ -16,7 +17,7 @@ export class CoinbaseScraper {
         const assets: PriceAssets[] = ["ethereum"];
 
         for(let asset of assets){
-            Logger.
+            log("ASSET SYNC", `Starting synchronization of asset: ${asset}`, "info");
             await this.synchronize(asset);
         }
     }
@@ -28,14 +29,20 @@ export class CoinbaseScraper {
 
         // Determine if we need to sync via minutes or half hour intervals
         if(currentTimestamp - databaseTimestamp > 1800){
+            log("ASSET SYNC", `Starting half hour syncs for asset: ${asset}`, "info");
             // Synchronize the half hour intervals first
             await this.synchronizeIterations(asset, 1800);
+            log("ASSET SYNC", `Half hour syncs complete for asset: ${asset}`, "info");
         }
 
         // Now, sync to the head of the API
+        log("ASSET SYNC", `Syncing asset ${asset} to head of current Coinbase API`, "info");
         await this.synchronizeTimestamps(asset, databaseTimestamp, currentTimestamp);
+        log("ASSET SYNC", `Asset ${asset} caught up to head. Rechecking in 30 seconds.`, "info");
         // Do this again in 30 seconds
-        this.sync[asset] = setTimeout(this.synchronize, 30000);
+        this.sync[asset] = setTimeout(() => {
+            this.synchronize(asset)
+        }, 30000);
         return;
     }
 
@@ -59,7 +66,9 @@ export class CoinbaseScraper {
     }
 
     private async synchronizeTimestamps(asset: PriceAssets, startTimestamp: number, endTimestamp: number){
-        const prices = await CoinbaseClient.fetchPrices(startTimestamp, endTimestamp);
+        log("ASSET SYNC", `Processing API response for asset ${asset} between timestamps ${startTimestamp} and ${endTimestamp}`, "info");
+        // Fetch prices in the time period
+        const prices = await CoinbaseClient.fetchPrices(asset, startTimestamp, endTimestamp);
 
         // Array response = [timestamp, ?, ?, ?, price at closing, volume]
         for(let price of prices){
@@ -74,5 +83,6 @@ export class CoinbaseScraper {
                 price: closingPrice
             })
         }
+        log("ASSET SYNC", `Processed API response for asset ${asset} between timestamps ${startTimestamp} and ${endTimestamp}`, "info");
     }
 }

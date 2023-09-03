@@ -14,6 +14,8 @@ export class CoinbaseClient {
             timeout: 5000
         });
 
+        log("COINBASE CLIENT", `Fetched timestamps ${timestamp} to ${endTimestamp} for asset ${asset} - got ${response.data.length} records`, "info");
+
         return response.data as CoinbasePricingResponse;
     }
 

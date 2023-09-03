@@ -41,7 +41,7 @@ export class PriceModel {
         ` as PriceResult[];
 
         // Cast all resulting timestamps to numbers
-        results.map((result) => result.timestamp = parseInt(`${result.timestamp}`));
+        results.map((result) => result.timestamp = parseFloat(`${result.timestamp}`));
 
         return results;
     }
@@ -53,7 +53,7 @@ export class PriceModel {
         ` as PriceResult[];
 
         // Cast all resulting timestamps to numbers
-        latestResult.map((result) => result.timestamp = parseInt(`${result.timestamp}`));
+        latestResult.map((result) => result.timestamp = parseFloat(`${result.timestamp}`));
 
         // Return our price result (there can only be one item in the array)
         return latestResult[0];
